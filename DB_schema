@@ -1,0 +1,13 @@
+
+
+CREATE DATABASE myapp DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci;
+
+use myapp;
+
+CREATE TABLE user(
+serial int(10) not null,
+id varchar(50) not null,
+pw varchar(50) not null,
+nickname varchar(50) not null,
+PRIMARY KEY(serial)
+);
