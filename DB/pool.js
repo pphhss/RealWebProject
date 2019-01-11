@@ -7,6 +7,7 @@ function Pool(){
   this.pool=null;
 }
 
+// initialize pool.
 Pool.prototype.init = function(){
   this.pool = mysql.createPool({
     connectionLimit : config.connectionLimit,
@@ -17,8 +18,8 @@ Pool.prototype.init = function(){
   });
 }
 
-
-exports.getPool = function(){
+//return pool that was already created.
+exports.getPool = function(){ 
   if(instance==null)
     instance = new Pool();
   
