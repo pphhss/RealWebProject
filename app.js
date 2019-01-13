@@ -8,7 +8,7 @@ var session = require('express-session')
 var csession = require('./utils/clientSession');
 
 var indexRouter = require('./routes/index');
-var usersRouter = require('./routes/user');
+var usersRouter = require('./routes/user/user');
 
 var app = express();
 
