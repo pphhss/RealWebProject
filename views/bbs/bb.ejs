@@ -1,0 +1,77 @@
+<div class="container mt-5">
+  <table class="table border">
+
+    <tbody>
+      <tr>
+
+        <td class="text-center bg-dark text-white">
+          글 제목
+        </td>
+        <td class="text-center" id="bb_title">
+          안녕
+        </td>
+        <td class="text-center  bg-dark text-white">
+          작성자
+        </td>
+        <td class="text-center" id="bb_nickname">
+          나야
+        </td>
+
+
+      </tr>
+
+      <tr>
+
+        <td class="text-center bg-dark text-white">
+          작성일자
+        </td>
+        <td class="text-center" id="bb_date">
+          몰라
+        </td>
+      </tr>
+      <tr style="height:350px;">
+        <td colspan="4" id="">
+          <div id="bb_content" style="height:350px;"></div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+</div>
+<script>
+  function init() {
+    var link = document.createElement("link");
+    link.type = "text/css";
+    link.rel = "stylesheet";
+    link.href = "https://cdn.quilljs.com/1.3.6/quill.snow.css";
+    document.getElementsByTagName("head")[0].appendChild(link);
+  }
+  init();
+</script>
+<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+
+
+<script>
+  var bb = <%- bb %>;
+
+  
+  var quill = new Quill('#bb_content', {
+    theme: 'snow',
+    modules:{
+      toolbar : false
+    },
+    readOnly:true
+  });
+
+  setBbs(bb);
+
+  
+
+  function setBbs(_bb){
+    $('#bb_title').html(_bb.title);
+    $('#bb_nickname').html(_bb.nickname);
+    $('#bb_date').html(_bb.time);
+    quill.setContents(JSON.parse(_bb.content));
+    
+  }
+</script>

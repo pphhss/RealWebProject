@@ -13,3 +13,23 @@ exports.registration = function(_data,_callback){
   var r = require('./user/registration');
   r.registration(_data,_callback);
 }
+
+exports.writeBoard = function(_data,_callback){
+  var b = require('./bbs/bbs');
+  b.writeBoard(_data,_callback);
+}
+
+exports.getBbsList = function(_data,_callback){
+  var b = require('./bbs/bbs');
+  b.getBbsList(_data,_callback);
+}
+
+exports.getPages = function(_callback){
+  var b = require('./bbs/bbs');
+  b.getPages(_callback);
+}
+
+exports.getBb = function(_data,_callback){
+  var b = require('./bbs/bbs');
+  b.getBb(_data,_callback);
+}
