@@ -9,6 +9,7 @@ var csession = require('./utils/clientSession');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user/user');
+var bbsRouter = require('./routes/bbs/bbs');
 
 var app = express();
 
@@ -33,6 +34,7 @@ app.use(csession); // user side session
 
 app.use('/', indexRouter);
 app.use('/user', usersRouter);
+app.use('/bbs',bbsRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
