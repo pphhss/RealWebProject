@@ -18,13 +18,13 @@
     <div class="container" style="text-align: center;">
 
       <span id="bbs_list_page_left_button_container">
-        <button class="btn btn-dark rounded-circle" disabled><span class="oi oi-caret-left"></span>
+        <button class="btn btn-dark rounded-circle" id="bbs_list_page_left_button" disabled onclick="loadPreButton();"><span class="oi oi-caret-left"></span>
         </button>
       </span>
       <span id="bbs_list_page_button_container">
 
       </span>
-      <span id="bbs_list_page_right_button_container"><button class="btn btn-dark rounded-circle"><span class="oi oi-caret-right"></span></button>
+      <span id="bbs_list_page_right_button_container"><button class="btn btn-dark rounded-circle" id="bbs_list_page_right_button" disabled onclick="loadNextButton();"><span class="oi oi-caret-right"></span></button>
       </span>
 
 
@@ -41,7 +41,7 @@
       type: "POST",
       url: "/bbs/JSON/pages",
       success: function (_page) {
-        var mMaxPage = parseInt(_page);
+        mMaxPage = parseInt(_page);
 
         loadBbButton();
       }
@@ -51,12 +51,26 @@
 
   });
 
+  function loadNextButton(){
+    mCurPage= (Math.floor((mCurPage-1)/5)+1)*5+1;
+    loadBbButton();
+    loadBbList(mCurPage);
+  }
+
+  function loadPreButton(){
+    mCurPage= (Math.floor((mCurPage-1)/5)-1)*5+1;
+    loadBbButton();
+    loadBbList(mCurPage);
+  }
+
   //load button 구현
   function loadBbButton() {
     var button_container = document.getElementById("bbs_list_page_button_container");
-    var maxI = ((mCurPage/5)+1 < mMaxPage) ? (mCurPage/5)+1 : mMaxPage;
+    button_container.innerHTML='';
+    var fiveMuiltiple = (Math.floor((mCurPage-1)/5)+1)*5; // 5의 배수.
+    var maxI = ( fiveMuiltiple < mMaxPage) ? fiveMuiltiple : mMaxPage;
 
-    for (mCurPage; mCurPage <= maxI; mCurPage++) {
+    for (var i=mCurPage; i <= maxI; i++) {
       var btn = document.createElement("button");
       btn.classList.add("btn");
       btn.classList.add("btn-dark");
@@ -64,11 +78,25 @@
       btn.innerHTML = i;
       button_container.appendChild(btn);
 
-      $(btn).click(function (e) {
+      $(btn).click(function (e) { 
         var page = parseInt(e.target.innerHTML);
         loadBbList(page);
+        mCurPage=page;
+        
       });
     }
+    if(fiveMuiltiple!=5)
+      document.getElementById('bbs_list_page_left_button').disabled = false;
+    else
+    document.getElementById('bbs_list_page_left_button').disabled = true;
+
+    
+    if(maxI!=mMaxPage)
+      document.getElementById('bbs_list_page_right_button').disabled = false;
+    else
+    document.getElementById('bbs_list_page_right_button').disabled = true;
+
+  
   }
 
     //load bulletin board list from server.
