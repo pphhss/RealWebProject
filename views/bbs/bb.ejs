@@ -1,4 +1,5 @@
 <div class="container mt-5">
+  <span id="bb_serial" style="display:none;"></span>
   <table class="table border">
 
     <tbody>
@@ -36,19 +37,14 @@
       </tr>
     </tbody>
   </table>
-
+  <div style="float:right;">
+    <button class="btn btn-dark" onclick="modify();">수정하기</button>
+    <button class="btn btn-warning" onclick="remove();">삭제하기</button>
+  </div>
 </div>
-<script>
-  function init() {
-    var link = document.createElement("link");
-    link.type = "text/css";
-    link.rel = "stylesheet";
-    link.href = "https://cdn.quilljs.com/1.3.6/quill.snow.css";
-    document.getElementsByTagName("head")[0].appendChild(link);
-  }
-  init();
-</script>
-<script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+<div id="bb_ok_modal_container"></div>
+<script src="/javascripts/bbs/init.js"></script>
+<script src="/javascripts/quill.js"></script>
 
 
 <script>
@@ -68,10 +64,52 @@
   
 
   function setBbs(_bb){
+    $('#bb_serial').html(_bb.serial);
     $('#bb_title').html(_bb.title);
     $('#bb_nickname').html(_bb.nickname);
     $('#bb_date').html(_bb.time);
-    quill.setContents(JSON.parse(_bb.content));
-    
+    quill.setContents(JSON.parse(_bb.content));    
   }
+
+  function remove(){
+
+    if($('#bb_ok_modal_container').html()=="")
+      $('#bb_ok_modal_container').load("/utils/modal/ok_modal.html");
+
+    /* ok modal 구현해야함*/
+    setTimeout(function(){
+      showOkModal("게시글 삭제 확인","정말 삭제하시겠습니까?",null,function(){
+      post("/bbs/action/delete",{serial:$('#bb_serial').html()}); //send post message
+    })
+    },100);
+  }
+
+  function modify(){
+    alert("아직 미구현입니다.")
+  }
+  
+  //To send message by post
+  function post(path, params, method) {
+    method = method || "post"; // Set method to post by default if not specified.
+
+    // The rest of this code assumes you are not using a library.
+    // It can be made less wordy if you use one.
+    var form = document.createElement("form");
+    form.setAttribute("method", method);
+    form.setAttribute("action", path);
+
+    for(var key in params) {
+        if(params.hasOwnProperty(key)) {
+            var hiddenField = document.createElement("input");
+            hiddenField.setAttribute("type", "hidden");
+            hiddenField.setAttribute("name", key);
+            hiddenField.setAttribute("value", params[key]);
+
+            form.appendChild(hiddenField);
+        }
+    }
+
+    document.body.appendChild(form);
+    form.submit();
+}
 </script>

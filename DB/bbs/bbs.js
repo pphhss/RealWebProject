@@ -1,7 +1,7 @@
 const NUMPERPAGE = 10; // # of bb per page.
 
 var pool = require('../pool').getPool(); //get pool.
-
+var poolAdapter = require('../poolAdapter'); // get poolAdapter
 
 
 exports.writeBoard = function (_data, _callback) {
@@ -10,7 +10,7 @@ exports.writeBoard = function (_data, _callback) {
   pool.getConnection(function (_err, _conn) {
     if (_err)
       throw _err;
-    _conn.query(query, _data, function (_err, _results) {
+    _conn.query(query, [_data], function (_err, _results) {
       if (_err) {
         console.log(this.sql);
         throw _err;
@@ -20,18 +20,37 @@ exports.writeBoard = function (_data, _callback) {
   });
 }
 
+exports.deleteBoard = function(_data,_callback){
+  var query = "UPDATE bbs SET remove=1";
+  var withWhere = ' WHERE serial='+_data.serial
+
+  pool.getConnection(function(_err,_conn){
+    if(_err)
+      throw _err;
+    
+    _conn.query(query+withWhere,function(_err,_results){
+      if(_err){
+        console.log(this.sql);
+        throw _err;
+      }
+      _callback();
+    });
+  })
+}
+
 
 
 exports.getBbsList = function (_data, _callback) {
   var offset = (_data.page - 1) * NUMPERPAGE;
 
   var query = "SELECT bbs.serial, bbs.title, bbs.time, user.nickname  FROM bbs INNER JOIN user ON bbs.user_serial=user.serial ";
+  var withWhere = ' WHERE bbs.remove=0 '
   var withBack = " ORDER BY bbs.serial DESC LIMIT " + NUMPERPAGE + " OFFSET " + offset;
 
   pool.getConnection(function (_err, _conn) {
     if (_err)
       throw _err;
-    _conn.query(query + withBack, function (_err, _results) {
+    _conn.query(query +withWhere+ withBack, function (_err, _results) {
       if (_err) {
         console.log(this.sql);
         throw _err;
@@ -71,5 +90,16 @@ exports.getBb = function (_data, _callback) {
       }
       _callback(_results[0]);
     })
+  });
+}
+
+exports.getUserSerial = function(_data,_callback){
+  var query = "SELECT bbs.user_serial FROM bbs";
+  var withWhere = ' WHERE bbs.serial='+pool.escape(_data.serial);
+  
+  console.log(_data.serial);
+  console.log(pool.escape(_data.serial));
+  poolAdapter.execute(query+withWhere,function(_results){
+    _callback(_results[0].user_serial);
   });
 }

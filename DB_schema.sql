@@ -18,6 +18,7 @@ CREATE TABLE bbs(
   title varchar(100) not null,
   content varchar(2000) not null,
   time datetime,
+  remove int(2),
   PRIMARY KEY(serial),
   FOREIGN KEY(user_serial) REFERENCES user(serial)
 );
