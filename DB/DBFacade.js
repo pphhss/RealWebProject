@@ -43,3 +43,13 @@ exports.getUserSerialFromBb = function(_data,_callback){
   var b = require('./bbs/bbs');
   b.getUserSerial(_data,_callback);
 }
+
+exports.getComments = function(_data,_callback){
+  var b = require('./bbs/bbs');
+  b.getComments(_data,_callback);
+}
+
+exports.writeComment = function(_data,_callback){
+  var b = require('./bbs/bbs');
+  b.writeComment(_data,_callback);
+}

@@ -18,10 +18,22 @@ CREATE TABLE bbs(
   title varchar(100) not null,
   content varchar(2000) not null,
   time datetime,
-  remove int(2),
+  remove int(2) DEFAULT 0,
   PRIMARY KEY(serial),
   FOREIGN KEY(user_serial) REFERENCES user(serial)
 );
 
 INSERT INTO bbs(user_serial,title,content,time) VALUES (0,'테스트입니다.','{"ops":[{"insert":"테스트입니다\\n"}]}','19-01-15');
 {"ops":[{"insert":"테스트입니다\\n"}]}
+
+CREATE TABLE bbs_comment(
+  serial int(10) not null AUTO_INCREMENT,
+  bbs_serial int(10) not null,
+  user_serial int(10) not null,
+  content varchar(2000) not null,
+  time datetime,
+  remove int(2) DEFAULT 0,
+  PRIMARY KEY(serial),
+  FOREIGN KEY(bbs_serial) REFERENCES bbs(serial),
+  FOREIGN KEY(user_serial) REFERENCES user(serial)
+);

@@ -24,3 +24,11 @@ exports.getBb = function(_data,_callback){
 exports.getUserSerial = function(_data,_callback){
   dbfacade.getUserSerialFromBb(_data,_callback);
 }
+
+exports.getComments = function(_data,_callback){
+  dbfacade.getComments(_data,_callback);
+}
+
+exports.writeComment = function(_data,_callback){
+  dbfacade.writeComment(_data,_callback);
+}

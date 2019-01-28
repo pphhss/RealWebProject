@@ -35,4 +35,19 @@ router.post("/delete", function (_req, _res) {
   });
 });
 
+router.post('/writeComment',function(_req,_res){
+  if(auth.auth(_req)){
+    var bc = require('../../controllers/bbsController');
+    bc.writeComment({
+      bbs_serial:parseInt(_req.body.bbs_serial),
+      user_serial:_req.session.user.serial,
+      content:_req.body.content
+    },
+    function(){
+      _res.send(JSON.stringify({result:1}));
+    });
+  }else
+    _res.send(JSON.stringify({result:2}))
+});
+
 module.exports = router;

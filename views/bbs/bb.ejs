@@ -37,18 +37,50 @@
       </tr>
     </tbody>
   </table>
-  <div style="float:right;">
-    <button class="btn btn-dark" onclick="modify();">수정하기</button>
-    <button class="btn btn-warning" onclick="remove();">삭제하기</button>
+  <div class="container">
+    
+    <div style="float:right;">
+      <button class="btn btn-dark" onclick="modify();"><span class="oi oi-pencil mr-1"></span>수정</button>
+      <button class="btn btn-warning" onclick="remove();"><span class="oi oi-trash mr-1"></span>삭제</button>
+    </div>
+    <div style="clear: both;"></div> 
+  </div>
+  
+  <div class="container mt-3" style="padding:10px; background-color:#f9f9f9;">
+    <div class="container" style="display:block;">
+      <div style="float:left; width:10%"><h3>댓글</h3></div>
+      <div style="float:right; width:90%">
+       <div class="p-1" style="float:left; width:85%"><textarea class="form-control" style="width:100%;" name="" id="bb_comment_content" cols="30" rows="1"></textarea></div>
+       <div class="p-1" style="float:right; width:15%"><button class="btn btn-dark" onclick="writeComment();">댓글 쓰기</button></div>   
+      
+     </div>
+    </div>
+    
+    <div style="clear:both;"></div>
+    <ul style="list-style-type: none;" id="bb_comment_ul">
+      
+    </ul>
   </div>
 </div>
 <div id="bb_ok_modal_container"></div>
+
+<li style="margin:10px; display:none;" class="comment-li">
+  <div class="border rounded" style="padding:5px;">
+    <div class="">
+      <span class="mr-1 comment-nickname" style="font-weight: bold;">닉네임</span>
+      <span class="comment-time">2018:0</span>
+    </div>
+    <p class="comment-comment">안녕하세요</p>
+  </div>
+</li>
 <script src="/javascripts/bbs/init.js"></script>
 <script src="/javascripts/quill.js"></script>
 
 
 <script>
   var bb = <%- bb %>;
+
+  var mFocus = false;
 
   
   var quill = new Quill('#bb_content', {
@@ -60,8 +92,77 @@
   });
 
   setBbs(bb);
+  loadComment();
 
-  
+  function writeComment(){
+    var isLogin=false;
+
+    <% if(csession!=0) { %>
+      isLogin=true;
+    <% } %>
+    
+    var bbsSerial = $('#bb_serial').html();
+    var content = $('#bb_comment_content').val();
+    
+    $.ajax({
+       type:"post",
+       url:"/bbs/action/writeComment",
+       data:{
+         bbs_serial:bbsSerial,
+         content : content
+       },
+       success: function(_res){
+        mFocus= true;
+        loadComment();
+       }
+     });
+
+  }
+
+  function loadComment(){
+    $.ajax({
+      type:"post",
+      url:"/bbs/JSON/comments",
+      data:{bbs_serial:$('#bb_serial').html()},
+      success:function(_res){
+        var res = JSON.parse(_res);
+        console.dir(res);
+
+        if(res.result==2){
+
+        }else if(res.result==1){
+          $('#bb_comment_ul').html("");
+          for(var i=0;i<res.list.length;i++){
+            var comment = res.list[i];
+            
+            if(mFocus && i == res.list.length-1){
+              addComment(comment.nickname,comment.content,comment.time,true);
+              mFocus=false;
+            }
+            else
+              addComment(comment.nickname,comment.content,comment.time,false);
+          }
+        }
+      }
+    })
+  }
+
+  function addComment(_nickname,_comment,_time,_isFocus){
+    var cloneLi = $($('.comment-li')[0]).clone()
+    cloneLi.find('.comment-nickname').html(_nickname);
+    cloneLi.find('.comment-comment').html(_comment);
+    cloneLi.find('.comment-time').html(_time);
+    cloneLi.appendTo('#bb_comment_ul');
+    cloneLi.show();
+
+    if(_isFocus){
+      $('html, body').animate({
+        scrollTop: parseInt(cloneLi.offset().top)
+    }, 500);
+    }
+    
+    
+  }
 
   function setBbs(_bb){
     $('#bb_serial').html(_bb.serial);

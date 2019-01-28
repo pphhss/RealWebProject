@@ -2,7 +2,7 @@
  * 
  * To check authentication by session.
  */
-exports.auth = function(_req,_user){
+exports.auth = function(_req){
   if(_req.session.user)
     return true;
   else
