@@ -23,7 +23,7 @@ router.post("/delete", function (_req, _res) {
   
   var serial = parseInt(_req.body.serial);
   
-  bc.getUserSerial({serial:serial}, function (_user_serial) { // get User_Serial from bbs serial
+  bc.getUserSerialFromBb({serial:serial}, function (_user_serial) { // get User_Serial from bbs serial
     if (auth.userAuth(_req, _user_serial)) { // if auth success
       bc.delete({
         serial: serial

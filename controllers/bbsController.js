@@ -21,7 +21,7 @@ exports.getBb = function(_data,_callback){
   dbfacade.getBb(_data,_callback);
 }
 
-exports.getUserSerial = function(_data,_callback){
+exports.getUserSerialFromBb = function(_data,_callback){
   dbfacade.getUserSerialFromBb(_data,_callback);
 }
 
