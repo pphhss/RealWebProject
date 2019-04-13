@@ -1,4 +1,3 @@
-
 var config = {
 
 };
@@ -12,6 +11,11 @@ config.db = {
 };
 config.server = {
   port: 3000
+};
+
+config.cloud={
+    fileTag:"-ppphhhsss-", // 파일 구분자
+    saveDirectory:"cloudData/" // 파일을 저장할 위치
 }
 
 

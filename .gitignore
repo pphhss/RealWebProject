@@ -6,3 +6,6 @@ package-lock.json
 
 # test
 test.js
+
+# cloud data
+cloudData/

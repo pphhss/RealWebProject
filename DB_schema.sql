@@ -37,3 +37,12 @@ CREATE TABLE bbs_comment(
   FOREIGN KEY(bbs_serial) REFERENCES bbs(serial),
   FOREIGN KEY(user_serial) REFERENCES user(serial)
 );
+
+CREATE TABLE cloud(
+    serial int(10) not null AUTO_INCREMENT,
+    user_serial int(10) not null,
+    filename varchar(50) not null, --파일이름
+    parent_serial int(10) not null, -- parent folder serial / if parent_serial is 0, then it is saved in root directory.
+    folder_flag char(1) not null, -- y : folder / n : file
+    url varchar(1024) not null, -- url 
+);

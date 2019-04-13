@@ -7,9 +7,12 @@ var session = require('express-session')
 
 var csession = require('./utils/clientSession');
 
+var testRouter = require('./routes/test');
+
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/user/user');
 var bbsRouter = require('./routes/bbs/bbs');
+var cloudRouter = require('./routes/cloud/cloud');
 
 var app = express();
 
@@ -33,8 +36,10 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(csession); // user side session
 
 app.use('/', indexRouter);
+app.use('/test',testRouter);
 app.use('/user', usersRouter);
 app.use('/bbs',bbsRouter);
+app.use('/cloud',cloudRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
